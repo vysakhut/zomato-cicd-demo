@@ -34,3 +34,16 @@ resource "aws_security_group" "zomato-webserver" {
     env     = var.project_environment
   }
 }
+
+resource "aws_instance" "git-webserver" {
+  ami                    = "ami-0d13e3e640877b0b9"
+  instance_type          = "t2.micro"
+  key_name               = "mumbai-region"
+  vpc_security_group_ids = [aws_security_group.zomato-webserver.id]
+  user_data              = file("setup.sh")
+  tags = {
+    Name    = "${var.project_name}-${var.project_environment}-git-webserver"
+    project = var.project_name
+    env     = var.project_environment
+  }
+}
